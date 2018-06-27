@@ -8,6 +8,17 @@ Feedback is displated on an LCD panel
 Written by Jack Eller for Escape Reality Games
 
  */
+
+
+/*
+   VERSION : 1.2
+   UPDATES : 
+    -  Added Counter
+    -  Added Infinite loop and data out pin to main controller
+   PINS    :
+    - Green-White      = SDA        [ A4 ]
+    - Blue-White       = SLC / CLK  [ A5 ]
+*/ 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include "Adafruit_TCS34725.h"
@@ -27,9 +38,13 @@ byte percentage_5[8] = { B11111, B11111, B11111, B11111, B11111, B11111, B11111,
 
 
 int speaker = 2;
+int count_right = 0 ; // Keep track of correct code count inputted
+int data_out    = 12; // Digital Pin 12 = Data Out to Main Room Controller [ Outside of room by toy shop ]
 
 void setup()
 {
+  pinMode(data_out,OUTPUT);
+  digitalWrite(data_out,HIGH);
   pinMode(2, OUTPUT);
   randomSeed(analogRead(0));
   lcd.init();                      // initialize the lcd
@@ -143,7 +158,7 @@ void loop()
           got = true;
 
   }
-    if(dg / dc > 0.4 && !got && colorTemp. > 3500){
+    if(dg / dc > 0.4 && !got && colorTemp > 3500){
 
         color=("Green");
         Serial.println("IT'S " + color);
@@ -198,6 +213,17 @@ void loop()
    lcd.write(4);
    lcd.setCursor(6,0);
    lcd.write(5);
+   count_right++;
+   delay(500);
+
+   while(count_right>= 5){ // Infinite Null Loop / Output Data to Main Controller Loop :
+     lcd.clear();
+     lcd.print("COLOR MATRIX HACKED!");
+     Serial.println("HACKED");
+     delay(1000);
+     digitalWrite(data_out,LOW); // Main controller looking for zero / low
+    
+   }
   }
 
  void thumbdown() {
