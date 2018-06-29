@@ -178,7 +178,7 @@ void setup()
   //delay(5000);
 }
 
-String colorMatrix [5][5] = {{"Blue","Yellow","Green","Red","Purple"},{"Green","Purple","Blue","Yellow","Red"},{"Blue","Green","Red","Yellow","Purple"},{"Red","Blue","Green","Purple","Yellow"},{"Yellow","Purple","Red","Green","Blue"}};
+//String colorMatrix [5][5] = {{"Blue","Yellow","Green","Red","Purple"},{"Green","Purple","Blue","Yellow","Red"},{"Blue","Green","Red","Yellow","Purple"},{"Red","Blue","Green","Purple","Yellow"},{"Yellow","Purple","Red","Green","Blue"}};
 String answers[5] = {"Yellow", "Purple", "Green", "Red", "Blue"};
 void loop()
 {
