@@ -12,20 +12,20 @@ Written by Jack Eller for Escape Reality Games
 
 /*
    VERSION : 1.2
-   UPDATES : 
+   UPDATES :
     -  Added Counter
     -  Added Infinite loop and data out pin to main controller
    PINS    :
     - Green-White      = SDA        [ A4 ]
     - Blue-White       = SLC / CLK  [ A5 ]
-*/ 
+*/
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include "Adafruit_TCS34725.h"
 LiquidCrystal_I2C lcd(0x3F,20,4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
 byte gammatable[256];
-String color = "nothing";
+String color = "";
 String change;
 
 
@@ -81,7 +81,7 @@ void setup()
 }
 
 String colorMatrix [5][5] = {{"Blue","Yellow","Green","Red","Purple"},{"Green","Purple","Blue","Yellow","Red"},{"Blue","Green","Red","Yellow","Purple"},{"Red","Blue","Green","Purple","Yellow"},{"Yellow","Purple","Red","Green","Blue"}};
-
+String answers[5] = {"Yellow", "Purple", "Green", "Red", "Blue"};
 void loop()
 {
   uint16_t r, g, b, c, colorTemp, lux;
@@ -98,12 +98,11 @@ void loop()
   Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
   Serial.println(" ");
   int puzzle = 0;
-  while(puzzle < 6){
-  int x = random(5);
-  int y = random(5);
+  while(puzzle < 5){
+
   char letter = char(x + 65);
   boolean working = true;
-  String answer = colorMatrix[x][y];
+  String answer = answer[puzzle];
   Serial.println("NOW WORKING");
   lcd.clear();
   lcd.print("PLEASE PLACE ");
@@ -171,6 +170,7 @@ void loop()
   }
 
   if(color.equalsIgnoreCase(answer)){
+    puzzle--;
     lcd.clear();
     thumbsup();
     working = false;
@@ -181,6 +181,13 @@ void loop()
     tone(speaker, 2500, 200);
 
     delay(5000);
+  }else{
+
+    puzzle = 0;
+    lcd.clear();
+    thumbdown();
+
+    
   }
 
 
@@ -222,7 +229,7 @@ void loop()
      Serial.println("HACKED");
      delay(1000);
      digitalWrite(data_out,LOW); // Main controller looking for zero / low
-    
+
    }
   }
 
